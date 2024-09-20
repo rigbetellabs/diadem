@@ -1,0 +1,153 @@
+<?xml version="1.0" ?>
+<robot name="diadem" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+<xacro:include filename="$(find diadem_description)/urdf/materials.xacro" />
+<xacro:include filename="$(find diadem_description)/urdf/diadem.trans" />
+<xacro:include filename="$(find diadem_description)/urdf/diadem.gazebo" />
+
+
+<link name="base_link">
+  <inertial>
+    <origin xyz="-0.000442563326493991 0.0005036289593653383 0.2715469717743787" rpy="0 0 0"/>
+    <mass value="46.062115064028625"/>
+    <inertia ixx="2.183508" iyy="3.678419" izz="5.108526" ixy="0.008815" iyz="-0.001381" ixz="-0.002933"/>
+  </inertial>
+  <visual>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="file://$(find diadem_description)/meshes/base_link.dae" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="silver"/>
+  </visual>
+  <collision>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="file://$(find diadem_description)/meshes/base_link.dae" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
+</link>
+
+<link name="RR_wheel_1">
+  <inertial>
+    <origin xyz="-2.521477218631052e-06 0.0008355153634170276 1.014704255930532e-05" rpy="0 0 0"/>
+    <mass value="11.400677627805935"/>
+    <inertia ixx="0.140117" iyy="0.23813" izz="0.140334" ixy="-0.0" iyz="3e-06" ixz="-9e-06"/>
+  </inertial>
+  <visual>
+    <origin xyz="0.28 0.3 -0.18" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="file://$(find diadem_description)/meshes/RR_wheel_1.dae" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="silver"/>
+  </visual>
+  <collision>
+    <origin xyz="0.28 0.3 -0.18" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="file://$(find diadem_description)/meshes/RR_wheel_1.dae" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
+</link>
+
+<link name="FL_wheel_1">
+  <inertial>
+    <origin xyz="2.521477222738877e-06 -0.0008355153634171941 1.014704255666854e-05" rpy="0 0 0"/>
+    <mass value="11.400677627805926"/>
+    <inertia ixx="0.140117" iyy="0.23813" izz="0.140334" ixy="-0.0" iyz="-3e-06" ixz="9e-06"/>
+  </inertial>
+  <visual>
+    <origin xyz="-0.28 -0.3 -0.18" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="file://$(find diadem_description)/meshes/FL_wheel_1.dae" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="silver"/>
+  </visual>
+  <collision>
+    <origin xyz="-0.28 -0.3 -0.18" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="file://$(find diadem_description)/meshes/FL_wheel_1.dae" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
+</link>
+
+<link name="RL_wheel_1">
+  <inertial>
+    <origin xyz="2.5214772154669163e-06 -0.0008355153634184154 1.0147042556557517e-05" rpy="0 0 0"/>
+    <mass value="11.400677627805788"/>
+    <inertia ixx="0.140117" iyy="0.23813" izz="0.140334" ixy="-0.0" iyz="-3e-06" ixz="9e-06"/>
+  </inertial>
+  <visual>
+    <origin xyz="0.28 -0.3 -0.18" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="file://$(find diadem_description)/meshes/RL_wheel_1.dae" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="silver"/>
+  </visual>
+  <collision>
+    <origin xyz="0.28 -0.3 -0.18" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="file://$(find diadem_description)/meshes/RL_wheel_1.dae" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
+</link>
+
+<link name="FR_wheel_1">
+  <inertial>
+    <origin xyz="-2.521477210637446e-06 0.0008355153634174162 1.0147042559055519e-05" rpy="0 0 0"/>
+    <mass value="11.400677627805969"/>
+    <inertia ixx="0.140117" iyy="0.23813" izz="0.140334" ixy="-0.0" iyz="3e-06" ixz="-9e-06"/>
+  </inertial>
+  <visual>
+    <origin xyz="-0.28 0.3 -0.18" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="file://$(find diadem_description)/meshes/FR_wheel_1.dae" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="silver"/>
+  </visual>
+  <collision>
+    <origin xyz="-0.28 0.3 -0.18" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="file://$(find diadem_description)/meshes/FR_wheel_1.dae" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
+</link>
+
+<link name="imu_link"/>
+<joint name="imu_joint" type="fixed">
+    <origin rpy="0 0 0" xyz="0.0 0.0 0.310"/>
+    <parent link="base_link"/>
+    <child link="imu_link"/>
+</joint>
+
+<joint name="RR_wheel_joint" type="continuous">
+  <origin xyz="-0.28 -0.3 0.18" rpy="0 0 0"/>
+  <parent link="base_link"/>
+  <child link="RR_wheel_1"/>
+  <axis xyz="-0.0 1.0 -0.0"/>
+</joint>
+
+<joint name="FL_wheel_joint" type="continuous">
+  <origin xyz="0.28 0.3 0.18" rpy="0 0 0"/>
+  <parent link="base_link"/>
+  <child link="FL_wheel_1"/>
+  <axis xyz="0.0 1.0 0.0"/>
+</joint>
+
+<joint name="RL_wheel_joint" type="continuous">
+  <origin xyz="-0.28 0.3 0.18" rpy="0 0 0"/>
+  <parent link="base_link"/>
+  <child link="RL_wheel_1"/>
+  <axis xyz="-0.0 1.0 0.0"/>
+</joint>
+
+<joint name="FR_wheel_joint" type="continuous">
+  <origin xyz="0.28 -0.3 0.18" rpy="0 0 0"/>
+  <parent link="base_link"/>
+  <child link="FR_wheel_1"/>
+  <axis xyz="-0.0 1.0 -0.0"/>
+</joint>
+
+
+
+
+
+</robot>

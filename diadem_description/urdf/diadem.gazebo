@@ -1,0 +1,74 @@
+<?xml version="1.0"?>
+<robot name="diadem" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+
+  <gazebo>
+
+    <plugin name='skid_steer_drive' filename='libgazebo_ros_diff_drive.so'>
+      <!-- Update rate -->
+      <update_rate>500</update_rate>
+
+      <!-- Number of wheel pairs -->
+      <num_wheel_pairs>2</num_wheel_pairs>
+
+      <!-- wheels0 -->
+      <left_joint>FL_wheel_joint</left_joint>
+      <right_joint>FR_wheel_joint</right_joint>
+
+      <!-- wheels1-->
+      <left_joint>RL_wheel_joint</left_joint>
+      <right_joint>RR_wheel_joint</right_joint>
+
+      <!-- kinematics -->
+      <wheel_separation>0.83</wheel_separation>
+      <wheel_separation>0.83</wheel_separation>
+
+      <wheel_diameter>0.35</wheel_diameter>
+      <wheel_diameter>0.35</wheel_diameter>
+
+      <!-- limits -->
+      <max_wheel_torque>200</max_wheel_torque>
+      <max_wheel_acceleration>3.0</max_wheel_acceleration>
+
+      <!-- output -->
+      <publish_odom>false</publish_odom>
+      <publish_odom_tf>false</publish_odom_tf>
+      <publish_wheel_tf>false</publish_wheel_tf>
+
+      <odometry_frame>odom</odometry_frame>
+      <robot_base_frame>base_link</robot_base_frame>
+
+    </plugin>
+  </gazebo>
+  <gazebo reference="base_link">
+    <mu1>0.2</mu1>
+    <mu2>0.2</mu2>
+    <selfCollide>true</selfCollide>
+    <gravity>true</gravity>
+  </gazebo>
+
+  <gazebo reference="RR_wheel_1">
+    <mu1>0.1</mu1>
+    <mu2>0.1</mu2>
+    <selfCollide>true</selfCollide>
+  </gazebo>
+
+  <gazebo reference="FL_wheel_1">
+    <mu1>0.1</mu1>
+    <mu2>0.1</mu2>
+    <selfCollide>true</selfCollide>
+  </gazebo>
+
+  <gazebo reference="RL_wheel_1">
+    <mu1>0.1</mu1>
+    <mu2>0.1</mu2>
+    <selfCollide>true</selfCollide>
+  </gazebo>
+
+  <gazebo reference="FR_wheel_1">
+    <mu1>0.1</mu1>
+    <mu2>0.1</mu2>
+    <selfCollide>true</selfCollide>
+  </gazebo>
+
+</robot>

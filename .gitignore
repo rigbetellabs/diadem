@@ -1,0 +1,25 @@
+
+# Build output
+dist/
+build/
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# IDE and editor files
+.vscode/
+
+
+# Operating system files
+
+
+# Log files
+*.log
+
+
+# Temporary files
+*.tmp
+*.temp
+

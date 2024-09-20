@@ -1,0 +1,14 @@
+[Unit]
+Description=RigBetel Labs UPSTART SERVICE
+After=network-online.target NetworkManager.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+ExecStart=/home/diadem/ros2_ws/src/diadem/start.sh
+#Environment="RMW_IMPLEMENTATION=rmw_fastrtps_cpp"  # Adjust this as needed for micro-ROS
+#Environment="ROS_DOMAIN_ID=0"  # Adjust this as needed for your setup
+Restart=on-failure
+TimeoutStartSec=0
+[Install]
+WantedBy=default.target

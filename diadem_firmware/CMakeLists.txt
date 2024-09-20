@@ -31,7 +31,7 @@ ament_python_install_package(${PROJECT_NAME})
 
 # Install Python executables
 install(PROGRAMS
-   compiled_scripts/pixhawk_to_cmd.pyc compiled_scripts/robot_diagnostics.pyc
+   compiled_scripts/pixhawk_to_cmd.pyc compiled_scripts/robot_diagnostics.pyc compiled_scripts/rbl_logger.pyc
    DESTINATION lib/${PROJECT_NAME}
 )
 install(PROGRAMS

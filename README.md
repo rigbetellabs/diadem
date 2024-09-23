@@ -2,7 +2,7 @@
 # Diadem Pixhawk Release
 ## ROS2 Humble Release
 
-![diadem Logo](img/logo.png)
+![diadem Logo](https://github.com/rigbetellabs/rbl_docs/blob/main/img/logo.png)
 
 <div align="center">
 
@@ -124,7 +124,7 @@ ros2 launch diadem_gazebo spawn_robot.launch.py
 ```
 The gazebo world looks like this:
 
-![playground](img/playground.png)
+![playground](https://github.com/rigbetellabs/rbl_docs/blob/main/img/playground.png)
 
 Now you can teleop the robot by publishing the msgs on /cmd_vel topic
 ## 3. Real Robot Instruction
@@ -141,7 +141,7 @@ Initiate a hotspot from your smartphone/laptop with the credentials
 - Hotspot Password: `adminadmin`
 
 <p align="center">
-<img src="img/mobilehotspot.jpeg" width="250"/>
+<img src="https://github.com/rigbetellabs/rbl_docs/blob/main/img/mobilehotspot.jpeg" width="250"/>
 </p>
 
 #### 2. Start the robot
@@ -149,13 +149,13 @@ Power on the robot and wait until it connects to your hotspot network
 
 | On powering on:            | When connected to hotspot:                               | 
 |--------------------|---------------------------------------------|
-| ![Step1](img/booting.gif)   | ![Step2](img/admin.gif)   |
+| ![Step1](https://github.com/rigbetellabs/rbl_docs/blob/main/img/booting.gif)   | ![Step2](https://github.com/rigbetellabs/rbl_docs/blob/main/img/admin.gif)   |
 
 #### 3. SSH into the robot
 
 - Connect your laptop/remote device to the same hotspot
 <p align="center">
-<img src="img/laptopconnect.png" width="750"/>
+<img src="https://github.com/rigbetellabs/rbl_docs/blob/main/img/laptopconnect.png" width="750"/>
 </p>
 
 - Open a new terminal, and enter the SSH credentials
@@ -174,7 +174,7 @@ pwd: "rbl@2020"
 
 | Method1           | Method2                            | 
 |--------------------|---------------------------------------------|
-| ![Step1](img/adminssh.jpeg)   | ![Step1](img/adminssh2.jpeg)    |
+| ![Step1](https://github.com/rigbetellabs/rbl_docs/blob/main/img/adminssh.jpeg)   | ![Step1](https://github.com/rigbetellabs/rbl_docs/blob/main/img/adminssh2.jpeg)    |
 
 #### 4. Connect to Wifi
 
@@ -182,13 +182,13 @@ pwd: "rbl@2020"
 ```bash
 sudo nmcli dev wifi list --rescan yes
 ```
-![Step1](img/wifilist.jpeg) 
+![Step1](https://github.com/rigbetellabs/rbl_docs/blob/main/img/wifilist.jpeg) 
 
 - Connect to your wifi network
 ```bash
 sudo nmcli device wifi connect "your-wifi-name" password "your-wifi-password"
 ```
-![Step1](img/wificonnect.jpeg) 
+![Step1](https://github.com/rigbetellabs/rbl_docs/blob/main/img/wificonnect.jpeg) 
 
 > [!IMPORTANT]
 > This will close the ssh pipeline and no response will be recieved over it further. Wait for about 30 seconds for robot to be connected to your wifi, once connected it will show the wifi name along with the IP address on the robot display.
@@ -196,7 +196,7 @@ sudo nmcli device wifi connect "your-wifi-name" password "your-wifi-password"
 #### 4. SSH using your Wifi
 - Now the robot is connected to your Wifi network! You can now shutdown your mobile hotspot, connect your remove device to the same wifi and access the robot using SSH:
 
-![Step1](img/wifissh.jpeg) 
+![Step1](https://github.com/rigbetellabs/rbl_docs/blob/main/img/wifissh.jpeg) 
 
 
 ### 3.2 Launch Sequence
@@ -231,7 +231,7 @@ By default realsense launch is set to False, launch the script with realsense:=T
 
 RC Control is operated by default on bootup. Turn on the Radiolink controller and set its mode to RC mode to start controlling the robot using RC.
 
-![RC control](img/rc-control.png)
+![RC control](https://github.com/rigbetellabs/rbl_docs/blob/main/img/rc-control.png)
 
 ### Motor Control Modes
 
@@ -307,17 +307,17 @@ Check your robot's connection via Pixhawk. It should be connected as shown below
 Download the app from [here](https://docs.qgroundcontrol.com/master/en/qgc-user-guide/getting_started/download_and_install.html) (Compatible with Windows, macOS, Ubuntu, and Android)
 
 <p align="center">
-<img src="img/qgc.jpg" width="400"/>
+<img src="https://github.com/rigbetellabs/rbl_docs/blob/main/img/qgc.jpg" width="400"/>
 </p>
 
 #### 2. Navigate to Application Settings > Comm Links > Add
 <p align="center">
-<img src="img/qgc1.gif" width="400"/>
+<img src="https://github.com/rigbetellabs/rbl_docs/blob/main/img/qgc1.gif" width="400"/>
 </p>
 
 #### 3. Generate a new UDP Connection
 <p align="center">
-<img src="img/qgc2.gif" width="400"/>
+<img src="https://github.com/rigbetellabs/rbl_docs/blob/main/img/qgc2.gif" width="400"/>
 </p>
 
 #### 4. Provide IP Addresses
@@ -326,7 +326,7 @@ Download the app from [here](https://docs.qgroundcontrol.com/master/en/qgc-user-
 > Enter the IP address of the robot. [How to obtain IP?](#9-get-ip-address-of-robot)
 
 <p align="center">
-<img src="img/qgc3.gif" width="400"/>
+<img src="https://github.com/rigbetellabs/rbl_docs/blob/main/img/qgc3.gif" width="400"/>
 </p>
 
 #### 5. Establish a connection
@@ -335,7 +335,7 @@ Download the app from [here](https://docs.qgroundcontrol.com/master/en/qgc-user-
 > There are chances when it is unable to establish a connection the very first time. In that scenario, delete the connection and follow the steps again.
 
 <p align="center">
-<img src="img/qgc4.gif" width="400"/>
+<img src="https://github.com/rigbetellabs/rbl_docs/blob/main/img/qgc4.gif" width="400"/>
 </p>
 
 Once connected, you will be able to see the robot's status and coordinates on the QGC page. Now you can control the vehicle and send missions through QGC.
@@ -357,8 +357,8 @@ We have provided the API Script along with the package to enable the GPS navigat
 
 > **IMPORTANT**: Connect the USB ports as per the following diagram:
 
-![USB Port Connections](img/port_connections_1.png)
-![USB Port Connections](img/port_connections_2.png)
+![USB Port Connections](https://github.com/rigbetellabs/rbl_docs/blob/main/img/port_connections_1.png)
+![USB Port Connections](https://github.com/rigbetellabs/rbl_docs/blob/main/img/port_connections_2.png)
 
 ### 3.7 Get IP Address of Robot
 
@@ -474,7 +474,7 @@ ros2 topic pub -1 /pid/control std_msgs/msg/Int32 "{data: 1}"
 - **Description:** The /hill_hold_control topic when enabled (It can be enabled by publishing true on /hill_hold_control topic) holds the robot on slope without any user input.
 
 <p align="center">
-<img src="img/hill_hold.gif" width="250"/>
+<img src="https://github.com/rigbetellabs/rbl_docs/blob/main/img/hill_hold.gif" width="250"/>
 </p>
 
 ### `/microros_domain_id`
@@ -602,12 +602,12 @@ By following these instructions, you can perform diagnostic tests on the diadem 
 ### Charger Provided with the robot
 </div>
 <p align="center">
-<img src="img/charger.png" width="250"/>
+<img src="https://github.com/rigbetellabs/rbl_docs/blob/main/img/charger.png" width="250"/>
 </p>
 
 **Step 1**: Set your robot into charging mode before plugging in the charger
 <p align="center">
-<img src="img/charge_mode.png" />
+<img src="https://github.com/rigbetellabs/rbl_docs/blob/main/img/charge_mode.png" />
 </p>
 
 > [!NOTE]
@@ -616,7 +616,7 @@ By following these instructions, you can perform diagnostic tests on the diadem 
 **Step 2**: Plugin the charger
 
 <p align="center">
-<img src="img/charge_plug.jpeg" width="300"/>
+<img src="https://github.com/rigbetellabs/rbl_docs/blob/main/img/charge_plug.jpeg" width="300"/>
 </p>
 
 ## 9. Removing the top lid of the robot
@@ -627,14 +627,14 @@ Remove the thumb screws and slightly open up the top lid of the robot. Remove th
 
 | 1. Camera Cable           | 2. GPS Cable                               | 
 |--------------------|---------------------------------------------|
-| ![Step1](img/cam_remove.gif)   | ![Step2](img/gps_remove.gif)   |
+| ![Step1](https://github.com/rigbetellabs/rbl_docs/blob/main/img/cam_remove.gif)   | ![Step2](https://github.com/rigbetellabs/rbl_docs/blob/main/img/gps_remove.gif)   |
 
 
 
 ## 10. LED indicators instructions
 
 ### Nomenclature
-![autojoy](img/diadem_lights.png)
+![autojoy](https://github.com/rigbetellabs/rbl_docs/blob/main/img/diadem_lights.png)
 
 
 
@@ -643,7 +643,7 @@ Remove the thumb screws and slightly open up the top lid of the robot. Remove th
 ### Instructions
 1. 
 <p align="center">
-<img src="img/disconnect.png" width="450"/>
+<img src="https://github.com/rigbetellabs/rbl_docs/blob/main/img/disconnect.png" width="450"/>
 
 | Indication type             | Indicates            |
 |-----------------------------|----------------------|
@@ -656,7 +656,7 @@ Remove the thumb screws and slightly open up the top lid of the robot. Remove th
 
 2. 
 <p align="center">
-<img src="img/ros_mode.png" width="450"/>
+<img src="https://github.com/rigbetellabs/rbl_docs/blob/main/img/ros_mode.png" width="450"/>
 
 | Indication type             | Indicates            |
 |-----------------------------|----------------------|
@@ -668,7 +668,7 @@ Remove the thumb screws and slightly open up the top lid of the robot. Remove th
 
 3. 
 <p align="center">
-<img src="img/pixhawk_light.png" width="450"/>
+<img src="https://github.com/rigbetellabs/rbl_docs/blob/main/img/pixhawk_light.png" width="450"/>
 
 | Indication type             | Indicates            |
 |-----------------------------|----------------------|
@@ -679,7 +679,7 @@ Remove the thumb screws and slightly open up the top lid of the robot. Remove th
 ------
 4. 
 <p align="center">
-<img src="img/rc_light.png" width="450"/>
+<img src="https://github.com/rigbetellabs/rbl_docs/blob/main/img/rc_light.png" width="450"/>
 
 | Indication type             | Indicates            |
 |-----------------------------|----------------------|
@@ -690,7 +690,7 @@ Remove the thumb screws and slightly open up the top lid of the robot. Remove th
 ------
 5. 
 <p align="center">
-<img src="img/forward_left.png" width="450"/>
+<img src="https://github.com/rigbetellabs/rbl_docs/blob/main/img/forward_left.png" width="450"/>
 
 | Indication type             | Indicates            |
 |-----------------------------|----------------------|
@@ -701,7 +701,7 @@ Remove the thumb screws and slightly open up the top lid of the robot. Remove th
 ------
 6. 
 <p align="center">
-<img src="img/forward_right.png" width="450"/>
+<img src="https://github.com/rigbetellabs/rbl_docs/blob/main/img/forward_right.png" width="450"/>
 
 | Indication type             | Indicates            |
 |-----------------------------|----------------------|
@@ -712,7 +712,7 @@ Remove the thumb screws and slightly open up the top lid of the robot. Remove th
 ------
 7. 
 <p align="center">
-<img src="img/rotate_in_place.png" width="450"/>
+<img src="https://github.com/rigbetellabs/rbl_docs/blob/main/img/rotate_in_place.png" width="450"/>
 
 | Indication type             | Indicates            |
 |-----------------------------|----------------------|
@@ -723,7 +723,7 @@ Remove the thumb screws and slightly open up the top lid of the robot. Remove th
 ------
 8. 
 <p align="center">
-<img src="img/backwards.png" width="450"/>
+<img src="https://github.com/rigbetellabs/rbl_docs/blob/main/img/backwards.png" width="450"/>
 
 | Indication type             | Indicates            |
 |-----------------------------|----------------------|
@@ -734,7 +734,7 @@ Remove the thumb screws and slightly open up the top lid of the robot. Remove th
 ------
 9. 
 <p align="center">
-<img src="img/battery_low.png" width="450"/>
+<img src="https://github.com/rigbetellabs/rbl_docs/blob/main/img/battery_low.png" width="450"/>
 
 | Indication type             | Indicates            |
 |-----------------------------|----------------------|
@@ -745,7 +745,7 @@ Remove the thumb screws and slightly open up the top lid of the robot. Remove th
 ------
 10. 
 <p align="center">
-<img src="img/emergency.png" width="450"/>
+<img src="https://github.com/rigbetellabs/rbl_docs/blob/main/img/emergency.png" width="450"/>
 
 | Indication type             | Indicates            |
 |-----------------------------|----------------------|

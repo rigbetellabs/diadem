@@ -26,7 +26,7 @@ def generate_launch_description():
   default_rviz_config_path = os.path.join(get_package_share_directory('diadem_description'), 'rviz/diadem_sensor_display.rviz')
   ros_ip = LaunchConfiguration('ros_ip')
     
-  
+  vr = LaunchConfiguration('vr')
   params_file_sim = os.path.join(prefix_address, 'config', 'nav2_params_simulation.yaml')
   params_file_robot = os.path.join(prefix_address, 'config', 'nav2_params.yaml')
   
@@ -93,12 +93,14 @@ def generate_launch_description():
               package='diadem_bringup',
               executable='robot_pose_publisher',
               name='robot_pose_node',
+              condition=IfCondition(PythonExpression(['not ', use_sim_time, ' and ', vr])),
               output='screen'
           )
   ros_tcp_endpoint_node= Node(
             package='ros_tcp_endpoint',
             executable='default_server_endpoint',
             name='tcp_endpoint',
+            condition=IfCondition(PythonExpression(['not ', use_sim_time, ' and ', vr])),
             parameters=[
                 {'ROS_IP': ros_ip},
                 {'ROS_TCP_PORT': 10000}
@@ -107,32 +109,21 @@ def generate_launch_description():
             respawn_delay=1.0,  # Wait 2 seconds before restart  # Maximum 10 restart attempts
             output='screen'
         )
-  # ROS TCP endpoint node
-  ros_tcp_endpoint_node= Node(
-            package='ros_tcp_endpoint',
-            executable='default_server_endpoint',
-            name='tcp_endpoint',
-            parameters=[
-                {'ROS_IP': ros_ip},
-                {'ROS_TCP_PORT': 10000}
-            ],
-            respawn=True,  # Automatically restart if node dies
-            respawn_delay=1.0,  # Wait 2 seconds before restart  # Maximum 10 restart attempts
-            output='screen'
-        )
+
   ros_nav_status = Node(
       package='diadem_bringup',
       executable='goal_status_publisher',
       name='ros_nav_status',
-      condition=IfCondition(PythonExpression(['not ', use_sim_time])),
+      condition=IfCondition(PythonExpression(['not ', use_sim_time, ' and ', vr])),
       output='screen',
   )
   nav2_goal_canceller_node = Node(
         package='diadem_bringup',
         executable='nav2_goal_canceller',
         name='nav2_goal_canceller_node',
-        condition=IfCondition(PythonExpression(['not ', use_sim_time])),
+        condition=IfCondition(PythonExpression(['not ', use_sim_time, ' and ', vr])),
         output='screen',
+        respawn=True,
     )
   start_rest_after_esptool = RegisterEventHandler(
         OnProcessExit(
@@ -168,6 +159,8 @@ def generate_launch_description():
                                             description='Absolute path to rviz config file'),
    launch.actions.DeclareLaunchArgument(name='ros_ip', default_value='192.168.0.101',
                                     description='ROS IP address for TCP endpoint'),
+    launch.actions.DeclareLaunchArgument(name='vr', default_value='False',
+                            description='ROS IP address for TCP endpoint'),
     Node(
         package='nav2_map_server',
         condition=IfCondition(PythonExpression(['not ', exploration])),

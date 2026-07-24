@@ -1,0 +1,33 @@
+/**:
+  ros__parameters:
+    # FAST-LIO2 Hardware Parameters
+    common:
+        lid_topic:  "/points_raw"
+        imu_topic:  "/livox/imu"        # Livox Mid-360 native IMU topic on hardware
+        time_sync_en: false
+        decay_life:   120
+
+    preprocess:
+        lidar_type: 6                  # Generic PointCloud2 / Ouster-style
+        scan_line:  40                 # 40 rings
+        timestamp_unit: 3              # 3: seconds
+        blind: 0.5
+
+    mapping:
+        acc_cov: 0.1
+        gyr_cov: 0.1
+        b_acc_cov: 0.0001
+        b_gyr_cov: 0.0001
+        fov_degree:    360.0
+        det_range:     90.0
+        extrinsic_est_en:  true
+        extrinsic_T: [ 0.0, 0.0, 0.0 ]
+        extrinsic_R: [ 1.0, 0.0, 0.0,
+                       0.0, 1.0, 0.0,
+                       0.0, 0.0, 1.0 ]
+
+    publish:
+        path_en:      true
+        scan_publish_en:  true
+        dense_publish_en: false
+        scan_bodyframe_pub_en: false

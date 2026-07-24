@@ -52,27 +52,33 @@
     <sensor name="lidar" type="gpu_lidar">
       <always_on>true</always_on>
       <visualize>false</visualize>
-      <update_rate>15</update_rate>
-      <topic>scan</topic>
+      <update_rate>10</update_rate>
+      <topic>lidar/points</topic>
       <gz_frame_id>lidar</gz_frame_id>
       <ray>
         <scan>
           <horizontal>
-            <samples>360</samples>
+            <samples>3600</samples>
             <resolution>1.0</resolution>
             <min_angle>-3.14159</min_angle>
             <max_angle>3.14159</max_angle>
           </horizontal>
+          <vertical>
+            <samples>64</samples>
+            <resolution>1.0</resolution>
+            <min_angle>-0.05</min_angle>
+            <max_angle>0.26180</max_angle>
+          </vertical>
         </scan>
         <range>
-          <min>0.5</min>
-          <max>20.0</max>
-          <resolution>0.015</resolution>
+          <min>0.1</min>
+          <max>100.0</max>
+          <resolution>0.001</resolution>
         </range>
         <noise>
           <type>gaussian</type>
           <mean>0.0</mean>
-          <stddev>0.01</stddev>
+          <stddev>0.003</stddev>
         </noise>
       </ray>
     </sensor>
@@ -173,6 +179,36 @@
           <z></z>
         </linear_acceleration>
       </imu>
+    </sensor>
+  </gazebo>
+
+  <gazebo reference="gps_link">
+    <sensor name="gps_sensor" type="navsat">
+      <always_on>true</always_on>
+      <update_rate>5.0</update_rate>
+      <topic>/gps/fix</topic>
+      <gz_frame_id>gps_link</gz_frame_id>
+    </sensor>
+  </gazebo>
+
+  <gazebo reference="camera_link">
+    <sensor name="camera" type="rgbd_camera">
+      <always_on>true</always_on>
+      <update_rate>30.0</update_rate>
+      <topic>camera</topic>
+      <gz_frame_id>camera_link_optical</gz_frame_id>
+      <camera>
+        <horizontal_fov>1.047198</horizontal_fov>
+        <image>
+          <width>640</width>
+          <height>480</height>
+          <format>R8G8B8</format>
+        </image>
+        <clip>
+          <near>0.1</near>
+          <far>10.0</far>
+        </clip>
+      </camera>
     </sensor>
   </gazebo>
 

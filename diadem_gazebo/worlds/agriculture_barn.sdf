@@ -1,0 +1,106 @@
+<?xml version='1.0' encoding='ASCII'?>
+<sdf version='1.9'>
+  <world name='default'>
+
+    <!-- PHYSICS -->
+    <physics name='1ms' type='ignored'>
+      <max_step_size>0.001</max_step_size>
+      <real_time_factor>1</real_time_factor>
+      <real_time_update_rate>1000</real_time_update_rate>
+      <gravity>0 0 -9.8</gravity>
+    </physics>
+
+    <!-- GZ-SIM SYSTEM PLUGINS (gz-sim, NOT ignition) -->
+    <plugin filename="gz-sim-physics-system"
+            name="gz::sim::systems::Physics"/>
+    <plugin filename="gz-sim-user-commands-system"
+            name="gz::sim::systems::UserCommands"/>
+    <plugin filename="gz-sim-scene-broadcaster-system"
+            name="gz::sim::systems::SceneBroadcaster"/>
+    <plugin filename="gz-sim-sensors-system"
+            name="gz::sim::systems::Sensors">
+      <render_engine>ogre2</render_engine>
+    </plugin>
+    <plugin filename="gz-sim-imu-system"
+            name="gz::sim::systems::Imu"/>
+    <plugin filename="gz-sim-navsat-system"
+            name="gz::sim::systems::NavSat"/>
+
+    <spherical_coordinates>
+      <surface_model>EARTH_WGS84</surface_model>
+      <latitude_deg>50.109461</latitude_deg>
+      <longitude_deg>-97.318978</longitude_deg>
+      <elevation>250</elevation>
+      <heading_deg>0</heading_deg>
+    </spherical_coordinates>
+
+    <!-- SCENE: outdoor sky with clouds (matching Clearpath) -->
+    <scene>
+      <ambient>1 1 1 1</ambient>
+      <background>1 1 1 1</background>
+      <shadows>1</shadows>
+      <sky>
+        <clouds>
+          <speed>12</speed>
+        </clouds>
+      </sky>
+      <grid>0</grid>
+    </scene>
+
+    <!-- SUN LIGHT (matching Clearpath world direction) -->
+    <light name='sun' type='directional'>
+      <cast_shadows>1</cast_shadows>
+      <pose>0 0 10 0 -0 0</pose>
+      <diffuse>1.0 1.0 1.0 1</diffuse>
+      <specular>0.2 0.2 0.2 1</specular>
+      <attenuation>
+        <range>1000</range>
+        <constant>0.9</constant>
+        <linear>0.01</linear>
+        <quadratic>0.001</quadratic>
+      </attenuation>
+      <direction>-0.5 0.5 -1.0</direction>
+    </light>
+
+    <!-- GUI CAMERA POSE (matching Clearpath world) -->
+    <gui fullscreen='0'>
+      <camera name='user_camera'>
+        <pose>39.6939 0.0 20.0 0 0.275643 3.14159</pose>
+        <view_controller>orbit</view_controller>
+      </camera>
+    </gui>
+
+    <model name='agriculture_geometry'>
+      <static>true</static>
+      <pose>0 0 0 0 0 0</pose>
+      <link name='agriculture_world_link'>
+        <pose>0 0 0 0 0 0</pose>
+        <collision name='collision'>
+          <pose>0 0 0 0 0 3.14159265358979</pose>
+          <geometry>
+            <mesh>
+              <uri>package://diadem_gazebo/meshes/agriculture_world.dae</uri>
+            </mesh>
+          </geometry>
+          <surface>
+            <friction>
+              <ode>
+                <mu>100</mu>
+                <mu2>50</mu2>
+              </ode>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='visual'>
+          <pose>0 0 0 0 0 3.14159265358979</pose>
+          <geometry>
+            <mesh>
+              <uri>package://diadem_gazebo/meshes/agriculture_world.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+      </link>
+    </model>
+
+  </world>
+</sdf>

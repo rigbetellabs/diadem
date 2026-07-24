@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<root BTCPP_format="4" main_tree_to_execute="MainTree">
+  <BehaviorTree ID="MainTree">
+    <RecoveryNode number_of_retries="6" name="NavigateRecovery">
+      <PipelineSequence name="NavigateWithReplanning">
+        <!-- RateController restricts how often we check path validity or replan -->
+        <RateController hz="1.0">
+          <RecoveryNode number_of_retries="1" name="PlannerRecovery">
+            <ComputePathToPose goal="{goal}" path="{path}" planner_id="GridBased"/>
+            <ReactiveFallback name="RecoveryFallback">
+              <GoalUpdated/>
+              <ClearEntireCostmap service_name="global_costmap/clear_entirely_global_costmap"/>
+            </ReactiveFallback>
+          </RecoveryNode>
+        </RateController>
+        <RecoveryNode number_of_retries="1" name="FollowPathRecovery">
+          <FollowPath path="{path}" controller_id="FollowPath" goal_checker_id="goal_checker"/>
+          <ReactiveFallback name="ControllerRecovery">
+            <GoalUpdated/>
+            <Sequence>
+              <ClearEntireCostmap service_name="local_costmap/clear_entirely_local_costmap"/>
+              <ClearEntireCostmap service_name="global_costmap/clear_entirely_global_costmap"/>
+            </Sequence>
+          </ReactiveFallback>
+        </RecoveryNode>
+      </PipelineSequence>
+      <ReactiveFallback name="GlobalRecovery">
+        <GoalUpdated/>
+        <Sequence>
+          <ClearEntireCostmap service_name="local_costmap/clear_entirely_local_costmap"/>
+          <ClearEntireCostmap service_name="global_costmap/clear_entirely_global_costmap"/>
+          <Spin spin_dist="1.57"/>
+          <Wait wait_duration="5.0"/>
+          <BackUp backup_dist="0.30" backup_speed="0.05"/>
+        </Sequence>
+      </ReactiveFallback>
+    </RecoveryNode>
+  </BehaviorTree>
+</root>

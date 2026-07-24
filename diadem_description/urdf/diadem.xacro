@@ -181,6 +181,22 @@
     <origin xyz="0 0 0.94" rpy="0.0 0.45 0"/>
   </joint>
 
+  <!-- Navigation & Sensor Frame extensions (VIO and GPS) -->
+  <link name="camera_link_optical"/>
+  <link name="gps_link"/>
+
+  <joint name="gps_joint" type="fixed">
+    <origin rpy="0 0 0" xyz="0.0 0.0 0.31"/>
+    <parent link="base_link"/>
+    <child link="gps_link"/>
+  </joint>
+
+  <joint name="camera_optical_joint" type="fixed">
+    <parent link="camera_link"/>
+    <child link="camera_link_optical"/>
+    <origin xyz="0 0 0" rpy="-1.57079632679 0 -1.57079632679"/>
+  </joint>
+
 
 
 </robot>

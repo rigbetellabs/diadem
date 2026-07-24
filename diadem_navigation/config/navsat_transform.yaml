@@ -1,0 +1,11 @@
+# NavSat Transform Config
+navsat_transform_node:
+  ros__parameters:
+    frequency: 10.0
+    delay: 5.0
+    magnetic_declination_radians: 0.0
+    yaw_offset: 0.0
+    zero_altitude: true
+    publish_filtered_gps: false
+    broadcast_utm_transform: false
+    use_odometry_yaw: true

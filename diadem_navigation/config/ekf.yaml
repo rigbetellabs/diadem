@@ -1,0 +1,145 @@
+# Robot Localization Dual-EKF Config
+
+# 1. LOCAL ESTIMATOR (Outputs: odom -> base_link transform)
+local_ekf_filter_node:
+  ros__parameters:
+    frequency: 50.0
+    sensor_timeout: 0.5
+    two_d_mode: true
+    predict_to_current_time: false
+    transform_time_offset: 0.0
+    transform_timeout: 0.0
+    print_diagnostics: true
+    debug: false
+
+    map_frame: map
+    odom_frame: odom
+    base_link_frame: base_link
+    world_frame: odom
+    publish_tf: true
+
+    # odom0: FAST-LIO2 via odom_frame_relay
+    odom0: /fast_lio/odometry_corrected
+    odom0_config: [true,  true,  false,
+                   false, false, true,
+                   false, false, false,
+                   false, false, false,
+                   false, false, false]
+    odom0_queue_size: 10
+    odom0_differential: true
+    odom0_relative: false
+
+    # odom1: Diff-drive wheel odometry
+    odom1: /odom
+    odom1_config: [false, false, false,
+                   false, false, false,
+                   true,  true,  false,
+                   false, false, false,
+                   false, false, false]
+    odom1_queue_size: 10
+    odom1_differential: false
+    odom1_relative: false
+    odom1_twist_rejection_threshold: 0.05
+
+    # imu0: Telemetry
+    imu0: /imu/data
+    imu0_config: [false, false, false,
+                  false, false, true,
+                  false, false, false,
+                  false, false, true,
+                  false, false, false]
+    imu0_queue_size: 10
+    imu0_differential: false
+    imu0_relative: false
+    imu0_remove_gravitational_acceleration: true
+
+    # odom2: VIO (RTAB-Map RGB-D Odometry)
+    odom2: /vio/odom
+    odom2_config: [false, false, false,
+                   false, false, false,
+                   true,  true,  false,
+                   false, false, true,
+                   false, false, false]
+    odom2_queue_size: 10
+    odom2_differential: false
+    odom2_twist_rejection_threshold: 0.05
+
+    use_control: false
+
+# 2. GLOBAL ESTIMATOR (Outputs: map -> odom transform)
+global_ekf_filter_node:
+  ros__parameters:
+    frequency: 30.0
+    sensor_timeout: 0.5
+    two_d_mode: true
+    predict_to_current_time: false
+    transform_time_offset: 0.0
+    transform_timeout: 0.0
+    print_diagnostics: true
+    debug: false
+
+    map_frame: map
+    odom_frame: odom
+    base_link_frame: base_link
+    world_frame: map
+    publish_tf: true
+
+    # odom0: FAST-LIO2
+    odom0: /fast_lio/odometry_corrected
+    odom0_config: [true,  true,  false,
+                   false, false, true,
+                   false, false, false,
+                   false, false, false,
+                   false, false, false]
+    odom0_queue_size: 10
+    odom0_differential: true
+    odom0_relative: false
+
+    # odom1: GPS-derived odometry (Absolute Anchor)
+    odom1: /odometry/gps_corrected
+    odom1_config: [true,  true,  false,
+                   false, false, false,
+                   false, false, false,
+                   false, false, false,
+                   false, false, false]
+    odom1_queue_size: 10
+    odom1_differential: false
+    odom1_relative: false
+    odom1_pose_rejection_threshold: 3.0  # Corrected to standard 3-sigma gate
+
+    # odom2: Wheel Odometry
+    odom2: /odom
+    odom2_config: [false, false, false,
+                   false, false, false,
+                   true,  true,  false,
+                   false, false, false,
+                   false, false, false]
+    odom2_queue_size: 10
+    odom2_differential: false
+    odom2_relative: false
+    odom2_twist_rejection_threshold: 0.05
+
+    # imu0: IMU
+    imu0: /imu/data
+    imu0_config: [false, false, false,
+                  false, false, true,
+                  false, false, false,
+                  false, false, true,
+                  false, false, false]
+    imu0_queue_size: 10
+    imu0_differential: false
+    imu0_relative: false
+    imu0_remove_gravitational_acceleration: true
+
+    # odom3: VIO (RTAB-Map RGB-D Odometry)
+    odom3: /vio/odom
+    odom3_config: [false, false, false,
+                   false, false, false,
+                   true,  true,  false,
+                   false, false, true,
+                   false, false, false]
+    odom3_queue_size: 10
+    odom3_differential: false
+    odom3_twist_rejection_threshold: 0.05
+
+    use_control: false

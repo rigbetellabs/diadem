@@ -1,0 +1,51 @@
+name: ROS2 CI
+
+on: [push, pull_request]
+
+jobs:
+  pre-commit:
+    name: Pre-commit
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+
+      - name: Run pre-commit
+        uses: pre-commit/action@v3.0.1
+
+  ros_gz_ci:
+    name: ros_gz CI
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - docker-image: "ubuntu:22.04"
+            gz-version: "fortress"
+            ros-distro: "humble"
+          - docker-image: "ubuntu:22.04"
+            gz-version: "garden"
+            ros-distro: "humble"
+          - docker-image: "ubuntu:22.04"
+            gz-version: "harmonic"
+            ros-distro: "humble"
+    container:
+      image: ${{ matrix.docker-image }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Build and Test
+        run: .github/workflows/build-and-test.sh
+        env:
+          DOCKER_IMAGE: ${{ matrix.docker-image }}
+          GZ_VERSION: ${{ matrix.gz-version  }}
+          ROS_DISTRO: ${{ matrix.ros-distro }}
+      - name: Build sdformat_urdf from source
+        uses: actions/checkout@v4
+        if: ${{ matrix.gz-version  }} == "garden"
+        with:
+          repository: ros/sdformat_urdf
+          ref: humble

@@ -23,6 +23,11 @@ find_package(std_srvs REQUIRED)
 ############## YDLIDAR SDK START#####################################
 #find ydlidar_sdk package
 find_package(ydlidar_sdk REQUIRED)
+
+if(ydlidar_sdk_DIR)
+  get_filename_component(YDLIDAR_SDK_INSTALL_LIB_DIR "${ydlidar_sdk_DIR}/../../" ABSOLUTE)
+  list(APPEND YDLIDAR_SDK_LIBRARY_DIRS "${YDLIDAR_SDK_INSTALL_LIB_DIR}")
+endif()
 ############## YDLIDAR SDK END#####################################
 
 #Include directories

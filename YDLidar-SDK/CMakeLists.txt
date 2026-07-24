@@ -66,7 +66,7 @@ endif()
 
 #############################################################################
 # option
-option( BUILD_SHARED_LIBS "Build shared libraries." OFF)
+option( BUILD_SHARED_LIBS "Build shared libraries." ON)
 option( BUILD_EXAMPLES "Build Example." ON)
 option( BUILD_CSHARP "Build CSharp." OFF)
 option( BUILD_TEST "Build Test." OFF)
@@ -181,6 +181,7 @@ install_package(
     DESTINATION ${CMAKE_INSTALL_PREFIX}/include
     INCLUDE_DIRS ${SDK_INCS}
     LINK_LIBS ${SDK_LIBS}
+    LINK_DIRS ${CMAKE_INSTALL_PREFIX}/lib
     )
 #########################################################################################
 # install doc

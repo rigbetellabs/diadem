@@ -56,9 +56,25 @@ def generate_launch_description():
                     arguments=['-d', rviz_config_file],
                     )
 
+    filter_config = os.path.join(share_dir, 'params', 'scan_filter_node.py')
+    laser_filter_node = Node(
+        package='ydlidar_ros2_driver',
+        executable='scan_filter_node',
+        name='scan_filter',
+        output='screen',
+        parameters=[{
+            'range_min':        0.35,
+            'range_max':        10.0,
+            'jump_window':      8,
+            'jump_thresh':      0.15,  # m — strict one-sided jump detection
+            'min_cluster_rays': 25,    # drop any cluster < 25 consecutive rays
+        }],
+    )
+
     return LaunchDescription([
         params_declare,
         driver_node,
         tf2_node,
+        laser_filter_node,
         rviz2_node,
     ])

@@ -5,11 +5,25 @@
   <version>0.0.0</version>
   <description>TODO: Package description</description>
   <maintainer email="sehgalishan26@gmail.com">starlink</maintainer>
-  <maintainer email="vinayaknayak@rigbetellabs.com">Vinayak</maintainer>
-
   <license>TODO: License declaration</license>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
+  <buildtool_depend>ament_cmake_python</buildtool_depend>
+
+  <depend>rclcpp</depend>
+  <depend>rclcpp_action</depend>
+  <depend>rclpy</depend>
+  <depend>std_msgs</depend>
+  <depend>geometry_msgs</depend>
+  <depend>sensor_msgs</depend>
+  <depend>nav2_msgs</depend>
+  <depend>action_msgs</depend>
+  <depend>tf2</depend>
+  <depend>tf2_ros</depend>
+  <depend>tf2_geometry_msgs</depend>
+  <exec_depend>diadem_firmware</exec_depend>
+  <exec_depend>realsense2_camera</exec_depend>
+  <exec_depend>image_transport</exec_depend>
 
   <test_depend>ament_lint_auto</test_depend>
   <test_depend>ament_lint_common</test_depend>

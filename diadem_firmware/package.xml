@@ -4,7 +4,7 @@
   <name>diadem_firmware</name>
   <version>0.0.0</version>
   <description>TODO: Package description</description>
-  <maintainer email="vinayaknayak@rigbetellabs.com">Vinayak</maintainer>
+  <maintainer email="kartiksoni@rigbetellabs.com">kartik</maintainer>
   <license>TODO: License declaration</license>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
@@ -22,6 +22,8 @@
   <depend>action_msgs</depend>
   <depend>tf2</depend>
   <depend>tf2_ros</depend>
+  <exec_depend>realsense2_camera</exec_depend>
+  <exec_depend>image_transport</exec_depend>
 
   <export>
     <build_type>ament_cmake</build_type>

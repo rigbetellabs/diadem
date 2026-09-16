@@ -82,7 +82,7 @@ def generate_launch_description():
   return LaunchDescription([
 
     SetEnvironmentVariable('RCUTILS_LOGGING_BUFFERED_STREAM', '1'),
-    launch.actions.DeclareLaunchArgument(name='use_sim_time', default_value='True',
+    launch.actions.DeclareLaunchArgument(name='use_sim_time', default_value='False',
                                             description='Flag to enable use_sim_time'),
     launch.actions.DeclareLaunchArgument(name='exploration', default_value='True',
                                             description='Flag to enable use_sim_time'),
@@ -117,7 +117,7 @@ def generate_launch_description():
     # gazebo_launch_cmd,
     ydlidar_launch_cmd,
     # navigation_launch_cmd,
-    # micro_ros_launch_cmd,
+    micro_ros_launch_cmd,
 
   ]
 )

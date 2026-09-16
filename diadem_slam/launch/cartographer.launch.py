@@ -52,6 +52,12 @@ def generate_launch_description():
       default_value=slam_config,
       description='name of .lua file to be used'
     ),
+    DeclareLaunchArgument(
+      'scan_topic',
+      default_value=PythonExpression(["'/scan' if '", use_sim_time, "' == 'True' or '", use_sim_time, "' == 'true' else '/scan_filtered'"]),
+      description='LaserScan topic to subscribe to'
+    ),
+
     Node(
       package='cartographer_ros',
       condition= IfCondition(exploration),
@@ -64,7 +70,8 @@ def generate_launch_description():
       parameters= [{'use_sim_time':use_sim_time}],
       remappings=[
         ('odom', 'odom'),
-        ('imu', '/imu/data')
+        ('imu', '/imu/data'),
+        ('scan', LaunchConfiguration('scan_topic'))
       ],
       output='screen'
     ),
@@ -80,7 +87,8 @@ def generate_launch_description():
       parameters= [{'use_sim_time':use_sim_time}],
       remappings=[
         ('odom', 'odom'),
-        ('imu', '/imu/data')
+        ('imu', '/imu/data'),
+        ('scan', LaunchConfiguration('scan_topic'))
       ],
       output='screen'
     ),

@@ -1,4 +1,4 @@
-﻿/*
+/*
  *  YDLIDAR SYSTEM
  *  YDLIDAR ROS 2 Node
  *
@@ -59,27 +59,27 @@ int main(int argc, char *argv[]) {
   //////////////////////int property/////////////////
   /// lidar baudrate
   int optval = 230400;
-  node->declare_parameter<std::int16_t>("baudrate");
+  node->declare_parameter<int>("baudrate");
   node->get_parameter("baudrate", optval);
   laser.setlidaropt(LidarPropSerialBaudrate, &optval, sizeof(int));
   /// tof lidar
   optval = TYPE_TRIANGLE;
-  node->declare_parameter<std::int16_t>("lidar_type");
+  node->declare_parameter<int>("lidar_type");
   node->get_parameter("lidar_type", optval);
   laser.setlidaropt(LidarPropLidarType, &optval, sizeof(int));
   /// device type
   optval = YDLIDAR_TYPE_SERIAL;
-  node->declare_parameter<std::int16_t>("device_type");
+  node->declare_parameter<int>("device_type");
   node->get_parameter("device_type", optval);
   laser.setlidaropt(LidarPropDeviceType, &optval, sizeof(int));
   /// sample rate
   optval = 9;
-  node->declare_parameter<std::int16_t>("sample_rate");
+  node->declare_parameter<int>("sample_rate");
   node->get_parameter("sample_rate", optval);
   laser.setlidaropt(LidarPropSampleRate, &optval, sizeof(int));
   /// abnormal count
   optval = 4;
-  node->declare_parameter<std::int16_t>("abnormal_check_count");
+  node->declare_parameter<int>("abnormal_check_count");
   node->get_parameter("abnormal_check_count", optval);
   laser.setlidaropt(LidarPropAbnormalCheckCount, &optval, sizeof(int));
      
@@ -201,8 +201,9 @@ int main(int argc, char *argv[]) {
       scan_msg->range_max = scan.config.max_range;
       
       int size = (scan.config.max_angle - scan.config.min_angle)/ scan.config.angle_increment + 1;
-      scan_msg->ranges.resize(size);
-      scan_msg->intensities.resize(size);
+      float fill_val = invalid_range_is_inf ? std::numeric_limits<float>::infinity() : 0.0f;
+      scan_msg->ranges.assign(size, fill_val);
+      scan_msg->intensities.assign(size, 0.0f);
       for(size_t i=0; i < scan.points.size(); i++) {
         int index = std::ceil((scan.points[i].angle - scan.config.min_angle)/scan.config.angle_increment);
         if(index >=0 && index < size) {
@@ -212,6 +213,7 @@ int main(int argc, char *argv[]) {
       }
 
       laser_pub->publish(*scan_msg);
+
 
 
     } else {

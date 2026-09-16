@@ -43,14 +43,40 @@ def generate_launch_description():
                                 parameters=[parameter_file],
                                 namespace='/',
                                 )
+
     tf2_node = Node(package='tf2_ros',
                     executable='static_transform_publisher',
                     name='static_tf_pub_laser',
                     arguments=['0', '0', '0.02','0', '0', '0', '1','base_link','laser_frame'],
                     )
 
+    # Laser filter node: removes ghost points from gaps/doorways
+    # Subscribes: /scan (Best Effort), Publishes: /scan_filtered (Best Effort)
+    laser_filter_node = Node(
+        package='ydlidar_ros2_driver',
+        executable='scan_filter_node',
+        name='scan_filter',
+        output='screen',
+        parameters=[{
+            'range_min':        0.15,
+            'range_max':        10.0,
+            'chassis_x_min':   -0.45,
+            'chassis_x_max':    0.45,
+            'chassis_y_min':   -0.45,
+            'chassis_y_max':    0.45,
+            'chassis_radius':   0.0,
+            'lidar_offset_x':   0.0,
+            'lidar_offset_y':   0.0,
+            'jump_window':      8,
+            'jump_thresh':      0.15,
+            'min_cluster_rays': 25,
+        }],
+    )
+
     return LaunchDescription([
         params_declare,
         driver_node,
         tf2_node,
+        laser_filter_node,
     ])
+

@@ -25,8 +25,8 @@ def generate_launch_description():
                     package='mavros',
                     executable='mavros_node',
                     parameters=[
-                        {'gcs_url': 'udp-b://:14550@'},
-                        {'fcu_url': '/dev/px4:921600'}
+                        {'gcs_url': 'udp://@192.168.0.103:14550'},
+                        {'fcu_url': '/dev/pixhwak:921600'}
                     ],
                     output='screen'
                 )
@@ -39,7 +39,7 @@ def generate_launch_description():
             actions=[
                 Node(
                     package='diadem_firmware',
-                    executable='pixhawk_to_cmd.pyc',
+                    executable='pixhawk_to_cmd.py',
                     name='pixhawk_to_cmd',
                     output='screen'
                 )

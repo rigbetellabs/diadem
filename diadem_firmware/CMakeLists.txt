@@ -26,21 +26,31 @@ if(BUILD_TESTING)
   ament_lint_auto_find_test_dependencies()
 endif()
 
-# Install Python modules
 ament_python_install_package(${PROJECT_NAME})
 
-# Install Python executables
+add_executable(network_status_publisher src/network_status_publisher.cpp)
+ament_target_dependencies(network_status_publisher rclcpp std_msgs)
+
+add_executable(goal_status_publisher src/goal_status_publisher.cpp)
+ament_target_dependencies(goal_status_publisher rclcpp std_msgs action_msgs)
+ 
+
 install(PROGRAMS
-   compiled_scripts/pixhawk_to_cmd.pyc compiled_scripts/robot_diagnostics.pyc compiled_scripts/rbl_logger.pyc
+   #compiled_scripts/pixhawk_to_cmd.pyc compiled_scripts/robot_diagnostics.pyc compiled_scripts/rbl_logger.pyc
+   scripts/pixhawk_to_cmd.py
+   scripts/imu_read_pub.py
    DESTINATION lib/${PROJECT_NAME}
 )
-install(PROGRAMS
- bin/network_status_publisher
- DESTINATION lib/${PROJECT_NAME}
+
+
+install(TARGETS
+  goal_status_publisher
+  network_status_publisher
+  DESTINATION lib/${PROJECT_NAME}
 )
 
 install(
-  DIRECTORY launch scripts
+  DIRECTORY launch scripts src
   DESTINATION share/${PROJECT_NAME}
 )
 

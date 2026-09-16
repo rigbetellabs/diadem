@@ -8,7 +8,7 @@ from launch.actions import (DeclareLaunchArgument, SetEnvironmentVariable,
                             ExecuteProcess)
 from launch_ros.actions import Node
 from launch.launch_description_sources import PythonLaunchDescriptionSource
-from launch.conditions import IfCondition
+from launch.conditions import IfCondition, UnlessCondition
 import launch_ros
 from launch_ros.descriptions import ParameterValue
 
@@ -28,14 +28,21 @@ def generate_launch_description():
         get_package_share_directory('nav2_bringup'),
         'rviz', 'nav2_default_view.rviz')
 
+    use_sim_time = LaunchConfiguration('use_sim_time')
+    exploration  = LaunchConfiguration('exploration')
+    realsense    = LaunchConfiguration('realsense')
+
     params_file_robot = os.path.join(prefix_address, 'config', 'nav2_params.yaml')
+    params_file_sim   = os.path.join(prefix_address, 'config', 'nav2_params_sim.yaml')
+
+    nav2_params_file = PythonExpression([
+        "'" + params_file_sim + "' if '", use_sim_time, "' in ['True', 'true', '1'] else '" + params_file_robot + "'"
+    ])
 
     map_file      = LaunchConfiguration('map')
     map_directory = os.path.join(
         get_package_share_directory('diadem_navigation'), 'maps', 'nav2_test_map.yaml')
 
-    use_sim_time = LaunchConfiguration('use_sim_time')
-    exploration  = LaunchConfiguration('exploration')
     x_pose   = LaunchConfiguration('x_pose',   default='0.0')
     y_pose   = LaunchConfiguration('y_pose',   default='0.0')
     z_pose   = LaunchConfiguration('z_pose',   default='0.0')
@@ -48,7 +55,7 @@ def generate_launch_description():
         executable='amcl',
         name='amcl',
         output='screen',
-        parameters=[params_file_robot,
+        parameters=[nav2_params_file,
                     {'use_sim_time': use_sim_time}]
     )
 
@@ -99,23 +106,47 @@ def generate_launch_description():
     ydlidar_launch_cmd = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
             os.path.join(ydlidar_launch_dir, 'ydlidar_launch.py')),
-        condition=IfCondition(PythonExpression(['not ', use_sim_time])),
+        condition=UnlessCondition(use_sim_time),
         launch_arguments={'use_sim_time': use_sim_time}.items())
 
     # Real robot: micro-ROS agent
     micro_ros_launch_cmd = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
             os.path.join(micro_ros_launch_dir, 'micro_ros.launch.py')),
-        condition=IfCondition(PythonExpression(['not ', use_sim_time])),
+        condition=UnlessCondition(use_sim_time),
         launch_arguments={'use_sim_time': use_sim_time}.items())
 
-    # Real robot: camera
-    camera_drive_node = Node(
-        package='v4l2_camera',
-        condition=IfCondition(PythonExpression(['not ', use_sim_time])),
-        executable='v4l2_camera_node',
-        name='camera_publisher',
+    # Real robot: BNO055 IMU driver (launches only when use_sim_time is False)
+    imu_launch_cmd = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(
+            os.path.join(micro_ros_launch_dir, 'imu.launch.py')),
+        condition=UnlessCondition(use_sim_time),
+        launch_arguments={
+            'serial_port': '/dev/imu',
+            'baudrate': '115200',
+            'use_sim_time': use_sim_time,
+        }.items())
+
+    # Hubble scripts (network status & goal status)
+    hubble_launch_cmd = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(
+            os.path.join(micro_ros_launch_dir, 'hubble_scripts.launch.py'))
     )
+
+    # Real robot: RealSense camera (D435i)
+    realsense_launch_cmd = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(
+            os.path.join(micro_ros_launch_dir, 'realsense_d435i.launch.py')),
+        condition=IfCondition(realsense)
+    )
+
+    # Real robot: camera
+    # camera_drive_node = Node(
+    #     package='v4l2_camera',
+    #     condition=IfCondition(PythonExpression(['not ', use_sim_time])),
+    #     executable='v4l2_camera_node',
+    #     name='camera_publisher',
+    # )
 
     # SLAM (Cartographer)
     cartographer_launch_cmd = IncludeLaunchDescription(
@@ -127,10 +158,17 @@ def generate_launch_description():
             'exploration': exploration,
         }.items())
 
-    # EKF (Odometry filtering)
-    ekf_launch_cmd = IncludeLaunchDescription(
+    # EKF (Odometry filtering) - suppressed, using Cartographer local scan matching instead
+    # ekf_launch_cmd = IncludeLaunchDescription(
+    #     PythonLaunchDescriptionSource(
+    #         os.path.join(ekf_launch_dir, 'ekf.launch.py')),
+    #     condition=IfCondition(PythonExpression(['not ', exploration])),
+    #     launch_arguments={'use_sim_time': use_sim_time}.items())
+
+    # Cartographer local scan matching for AMCL (provides odom -> base_link TF)
+    amcl_carto_launch_cmd = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
-            os.path.join(ekf_launch_dir, 'ekf.launch.py')),
+            os.path.join(cartographer_launch_dir, 'amcl.launch.py')),
         condition=IfCondition(PythonExpression(['not ', exploration])),
         launch_arguments={'use_sim_time': use_sim_time}.items())
 
@@ -142,7 +180,7 @@ def generate_launch_description():
                 PythonLaunchDescriptionSource(
                     os.path.join(navigation_dir, 'navigation.launch.py')),
                 launch_arguments={
-                    'params_file':  params_file_robot,
+                    'params_file':  nav2_params_file,
                     'use_sim_time': use_sim_time,
                     'exploration':  exploration,
                 }.items())
@@ -155,6 +193,9 @@ def generate_launch_description():
         DeclareLaunchArgument(
             name='use_sim_time', default_value='False',
             description='Set True for Ignition sim, False for real robot'),
+        DeclareLaunchArgument(
+            name='realsense', default_value='False',
+            description='Set True to launch Intel RealSense D435i camera, False otherwise'),
         DeclareLaunchArgument(
             name='exploration', default_value='True',
             description='Enable SLAM exploration (True) or navigate with pre-built map (False)'),
@@ -209,10 +250,16 @@ def generate_launch_description():
                         {'node_names': ['map_server', 'amcl']}]),
 
         state_publisher_launch_cmd,  
-        rviz_node,
+        #rviz_node,
         gazebo_world_launch_cmd,     
         spawn_robot_launch_cmd,      
-        ekf_launch_cmd,            
+        ydlidar_launch_cmd,
+        micro_ros_launch_cmd,
+        imu_launch_cmd,
+        hubble_launch_cmd,
+        realsense_launch_cmd,
+        # ekf_launch_cmd,
+        amcl_carto_launch_cmd,
         cartographer_launch_cmd,      
         amcl_node,                    
         navigation_launch_cmd,        

@@ -79,6 +79,12 @@ install(TARGETS
 install(DIRECTORY launch params startup config
     DESTINATION share/${PROJECT_NAME})
 
+# Install Python filter node as a ROS2 executable
+install(PROGRAMS
+    params/scan_filter_node.py
+    DESTINATION lib/${PROJECT_NAME}
+    RENAME scan_filter_node)
+
 if(BUILD_TESTING)
     find_package(ament_lint_auto REQUIRED)
     ament_lint_auto_find_test_dependencies()

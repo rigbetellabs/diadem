@@ -1,0 +1,60 @@
+laser_filter:
+  ros__parameters:
+    scan_filter_chain:
+      # Step 1: Drop readings outside valid range
+      - name: range_filter
+        type: laser_filters/LaserScanRangeFilter
+        params:
+          use_message_range_limits: false
+          lower_threshold: 0.15
+          upper_threshold: 10.0
+          lower_replacement_value: -.inf
+          upper_replacement_value: .inf
+
+      # Step 2: Shadow filter - removes grazing-angle reflections that appear
+      # as scattered points at wall edges and corners.
+      - name: shadow_filter
+        type: laser_filters/ScanShadowsFilter
+        params:
+          min_angle: 10.0
+          max_angle: 170.0
+          neighbors: 20
+          window: 1
+
+      # Step 3: Speckle filter - removes remaining isolated ghost clusters
+      # (points seen through doorway/gap openings)
+      - name: speckle_filter
+        type: laser_filters/LaserScanSpeckleFilter
+        params:
+          filter_type: 1
+          max_range: 10.0
+          max_range_difference: 1.0
+          filter_window: 5
+
+scan_to_scan_filter_chain:
+  ros__parameters:
+    scan_filter_chain:
+      - name: range_filter
+        type: laser_filters/LaserScanRangeFilter
+        params:
+          use_message_range_limits: false
+          lower_threshold: 0.15
+          upper_threshold: 10.0
+          lower_replacement_value: -.inf
+          upper_replacement_value: .inf
+
+      - name: shadow_filter
+        type: laser_filters/ScanShadowsFilter
+        params:
+          min_angle: 10.0
+          max_angle: 170.0
+          neighbors: 20
+          window: 1
+
+      - name: speckle_filter
+        type: laser_filters/LaserScanSpeckleFilter
+        params:
+          filter_type: 1
+          max_range: 10.0
+          max_range_difference: 1.0
+          filter_window: 5

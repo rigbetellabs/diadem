@@ -13,8 +13,9 @@
       <left_joint>RL_wheel_joint</left_joint>
       <right_joint>RR_wheel_joint</right_joint>
 
-      <wheel_separation>0.60</wheel_separation>
-      <wheel_radius>0.18</wheel_radius>
+      <!-- Diadem V2: track=520mm → separation=0.52m; wheel radius=0.15m -->
+      <wheel_separation>0.52</wheel_separation>
+      <wheel_radius>0.15</wheel_radius>
 
       <max_linear_acceleration>5.0</max_linear_acceleration>
       <max_linear_deceleration>5.5</max_linear_deceleration>
@@ -52,27 +53,27 @@
     <sensor name="lidar" type="gpu_lidar">
       <always_on>true</always_on>
       <visualize>false</visualize>
-      <update_rate>15</update_rate>
-      <topic>scan</topic>
+      <update_rate>10</update_rate>
+      <topic>/scan</topic>
       <gz_frame_id>lidar</gz_frame_id>
       <ray>
         <scan>
           <horizontal>
-            <samples>360</samples>
+            <samples>720</samples>
             <resolution>1.0</resolution>
             <min_angle>-3.14159</min_angle>
             <max_angle>3.14159</max_angle>
           </horizontal>
         </scan>
         <range>
-          <min>0.5</min>
+          <min>0.1</min>
           <max>20.0</max>
-          <resolution>0.015</resolution>
+          <resolution>0.01</resolution>
         </range>
         <noise>
           <type>gaussian</type>
           <mean>0.0</mean>
-          <stddev>0.01</stddev>
+          <stddev>0.003</stddev>
         </noise>
       </ray>
     </sensor>
@@ -90,8 +91,6 @@
         </friction>
       </surface>
     </collision>
-    <selfCollide>true</selfCollide>
-    <gravity>true</gravity>
   </gazebo>
 
   <gazebo reference="RR_wheel_1">
@@ -104,9 +103,16 @@
             <fdir1>1 0 0</fdir1>
           </ode>
         </friction>
+        <contact>
+          <ode>
+            <kp>1e6</kp>
+            <kd>1.0</kd>
+            <max_vel>0.1</max_vel>
+            <min_depth>0.001</min_depth>
+          </ode>
+        </contact>
       </surface>
     </collision>
-    <selfCollide>true</selfCollide>
   </gazebo>
 
   <gazebo reference="FL_wheel_1">
@@ -119,9 +125,16 @@
             <fdir1>1 0 0</fdir1>
           </ode>
         </friction>
+        <contact>
+          <ode>
+            <kp>1e6</kp>
+            <kd>1.0</kd>
+            <max_vel>0.1</max_vel>
+            <min_depth>0.001</min_depth>
+          </ode>
+        </contact>
       </surface>
     </collision>
-    <selfCollide>true</selfCollide>
   </gazebo>
 
   <gazebo reference="RL_wheel_1">
@@ -134,9 +147,16 @@
             <fdir1>1 0 0</fdir1>
           </ode>
         </friction>
+        <contact>
+          <ode>
+            <kp>1e6</kp>
+            <kd>1.0</kd>
+            <max_vel>0.1</max_vel>
+            <min_depth>0.001</min_depth>
+          </ode>
+        </contact>
       </surface>
     </collision>
-    <selfCollide>true</selfCollide>
   </gazebo>
 
   <gazebo reference="FR_wheel_1">
@@ -149,30 +169,67 @@
             <fdir1>1 0 0</fdir1>
           </ode>
         </friction>
+        <contact>
+          <ode>
+            <kp>1e6</kp>
+            <kd>1.0</kd>
+            <max_vel>0.1</max_vel>
+            <min_depth>0.001</min_depth>
+          </ode>
+        </contact>
       </surface>
     </collision>
-    <selfCollide>true</selfCollide>
   </gazebo>
 
   <gazebo reference="imu_link">
     <sensor name="imu_sensor" type="imu">
       <always_on>1</always_on>
-      <update_rate>50</update_rate>
+      <update_rate>250</update_rate>
       <visualize>false</visualize>
       <topic>/imu/data</topic>
       <gz_frame_id>imu_link</gz_frame_id>
       <imu>
         <angular_velocity>
-          <x></x>
-          <y></y>
-          <z></z>
+          <x><noise type="gaussian"><mean>0</mean><stddev>0.0003394</stddev></noise></x>
+          <y><noise type="gaussian"><mean>0</mean><stddev>0.0003394</stddev></noise></y>
+          <z><noise type="gaussian"><mean>0</mean><stddev>0.0003394</stddev></noise></z>
         </angular_velocity>
         <linear_acceleration>
-          <x></x>
-          <y></y>
-          <z></z>
+          <x><noise type="gaussian"><mean>0</mean><stddev>0.004</stddev></noise></x>
+          <y><noise type="gaussian"><mean>0</mean><stddev>0.004</stddev></noise></y>
+          <z><noise type="gaussian"><mean>0</mean><stddev>0.004</stddev></noise></z>
         </linear_acceleration>
       </imu>
+    </sensor>
+  </gazebo>
+
+  <gazebo reference="gps_link">
+    <sensor name="gps_sensor" type="navsat">
+      <always_on>true</always_on>
+      <update_rate>5.0</update_rate>
+      <topic>/gps/fix</topic>
+      <gz_frame_id>gps_link</gz_frame_id>
+    </sensor>
+  </gazebo>
+
+  <gazebo reference="camera_link">
+    <sensor name="camera" type="rgbd_camera">
+      <always_on>true</always_on>
+      <update_rate>30.0</update_rate>
+      <topic>camera</topic>
+      <gz_frame_id>camera_link_optical</gz_frame_id>
+      <camera>
+        <horizontal_fov>1.047198</horizontal_fov>
+        <image>
+          <width>640</width>
+          <height>480</height>
+          <format>R8G8B8</format>
+        </image>
+        <clip>
+          <near>0.1</near>
+          <far>10.0</far>
+        </clip>
+      </camera>
     </sensor>
   </gazebo>
 

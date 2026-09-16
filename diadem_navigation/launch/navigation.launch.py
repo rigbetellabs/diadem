@@ -2,7 +2,7 @@ import os
 from ament_index_python.packages import get_package_share_directory
 from launch.actions import IncludeLaunchDescription, DeclareLaunchArgument
 from launch.launch_description_sources import PythonLaunchDescriptionSource
-from launch.substitutions import LaunchConfiguration
+from launch.substitutions import LaunchConfiguration, PythonExpression
 from launch import LaunchDescription
 
 
@@ -13,9 +13,14 @@ def generate_launch_description():
   use_sim_time = LaunchConfiguration('use_sim_time', default='True')
   exploration   = LaunchConfiguration('exploration',  default='False')
 
-  param_dir = LaunchConfiguration(
-      'params_file',
-      default=os.path.join(prefix_address, 'config', 'nav2_params.yaml'))
+  params_file_robot = os.path.join(prefix_address, 'config', 'nav2_params.yaml')
+  params_file_sim   = os.path.join(prefix_address, 'config', 'nav2_params_sim.yaml')
+
+  default_params_file = PythonExpression([
+      "'" + params_file_sim + "' if '", use_sim_time, "' in ['True', 'true', '1'] else '" + params_file_robot + "'"
+  ])
+
+  param_dir = LaunchConfiguration('params_file', default=default_params_file)
 
   navigation_launch_cmd = IncludeLaunchDescription(
       PythonLaunchDescriptionSource([nav2_launch_dir, '/navigation_launch.py']),
@@ -35,7 +40,7 @@ def generate_launch_description():
         description='Whether to run in SLAM/exploration mode'),
     DeclareLaunchArgument(
         'params_file',
-        default_value=os.path.join(prefix_address, 'config', 'nav2_params.yaml'),
+        default_value=default_params_file,
         description='Path to Nav2 params yaml'),
     navigation_launch_cmd,
   ])

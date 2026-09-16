@@ -1,6 +1,17 @@
 <?xml version="1.0" ?>
 <robot name="diadem" xmlns:xacro="http://www.ros.org/wiki/xacro">
 
+<!-- ============================================================
+     DIADEM V2 - Compact Platform  (Simulation XACRO)
+     Wheel track width  : 520 mm  → separation = 0.52 m
+     Wheel base         : 500 mm  → ±0.25 m in X
+     Wheel radius       : 0.24 m
+     Wheel width        : ~100 mm → 0.10 m
+     Base mass          : 90 kg
+     Body dimensions    : 810 mm (L) × 570 mm (W) × ~300 mm (H)
+     LiDAR              : r=0.05m, h=0.06m, @0.75m above base
+     ============================================================ -->
+
 <xacro:include filename="$(find diadem_description)/urdf/materials.xacro" />
 <xacro:include filename="$(find diadem_description)/urdf/diadem.trans" />
 <xacro:include filename="$(find diadem_description)/urdf/diadem.gazebo" />
@@ -8,93 +19,129 @@
 
 <link name="base_link">
   <inertial>
-    <origin xyz="-0.000442563326493991 0.0005036289593653383 0.2715469717743787" rpy="0 0 0"/>
-    <mass value="120.00"/>
-    <inertia ixx="5.68" iyy="9.60" izz="13.28" ixy="0.0228" iyz="-0.0036" ixz="-0.0076"/>
+    <origin xyz="0.0 0.0 0.15" rpy="0 0 0"/>
+    <mass value="90.0"/>
+    <!-- Box inertia: L=0.81, W=0.57, H=0.30
+         Ixx = m/12*(W²+H²) = 3.112
+         Iyy = m/12*(L²+H²) = 5.595
+         Izz = m/12*(L²+W²) = 7.357  -->
+    <inertia ixx="3.112" iyy="5.595" izz="7.357" ixy="0.0" iyz="0.0" ixz="0.0"/>
   </inertial>
   <visual>
-    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <!-- Z offset 0.01m aligns mesh axle (Z=0.14m) with wheel joint height (Z=0.15m). Front faces +X. -->
+    <origin xyz="0 0 0.01" rpy="0 0 0"/>
     <geometry>
-      <mesh filename="file://$(find diadem_description)/meshes/base_link.dae" scale="0.001 0.001 0.001"/>
+      <mesh filename="package://diadem_description/meshes/base_link.stl" scale="0.001 0.001 0.001"/>
     </geometry>
     <material name="silver"/>
   </visual>
   <collision name="base_link_collision">
+    <!-- Inset collision box raised above wheel contact plane.
+         Center at z=0.25m, height=0.24m → bottom at z=0.13m,
+         well above wheel bottom (z=0.0m) so only wheels touch ground.
+         Y=0.38m stays narrower than wheel track (0.52m). -->
     <origin xyz="0 0 0.25" rpy="0 0 0"/>
     <geometry>
-      <box size="0.5 0.5 0.3"/>
+      <box size="0.42 0.38 0.24"/>
     </geometry>
   </collision>
 </link>
 
+<!-- =================== WHEELS ===================
+     Radius = 0.15 m, width = 0.06 m, mass = 11.4 kg
+     Ixx = Izz = m/12*(3r²+h²) = 0.068
+     Iyy        = m*r²/2        = 0.128  -->
+
 <link name="RR_wheel_1">
   <inertial>
-    <origin xyz="-2.521477218631052e-06 0.0008355153634170276 1.014704255930532e-05" rpy="0 0 0"/>
-    <mass value="11.400677627805935"/>
-    <inertia ixx="0.140117" iyy="0.23813" izz="0.140334" ixy="-0.0" iyz="3e-06" ixz="-9e-06"/>
+    <origin xyz="0.0 0.0 0.0" rpy="0 0 0"/>
+    <mass value="11.4"/>
+    <inertia ixx="0.068" iyy="0.128" izz="0.068" ixy="0.0" iyz="0.0" ixz="0.0"/>
   </inertial>
   <visual>
-    <origin xyz="0.28 0.3 -0.18" rpy="0 0 0"/>
+    <origin xyz="-0.302688 -0.283906 -0.140288" rpy="0 0 0"/>
     <geometry>
-      <mesh filename="file://$(find diadem_description)/meshes/RR_wheel_1.dae" scale="0.001 0.001 0.001"/>
+      <mesh filename="package://diadem_description/meshes/link5_1.stl" scale="0.001 0.001 0.001"/>
     </geometry>
     <material name="silver"/>
   </visual>
   <collision name="RR_wheel_1_collision">
     <origin xyz="0 0 0" rpy="1.57079632679 0 0"/>
     <geometry>
-      <cylinder radius="0.18" length="0.08"/>
+      <cylinder radius="0.15" length="0.06"/>
     </geometry>
   </collision>
 </link>
 
 <link name="FL_wheel_1">
   <inertial>
-    <origin xyz="2.521477222738877e-06 -0.0008355153634171941 1.014704255666854e-05" rpy="0 0 0"/>
-    <mass value="11.400677627805926"/>
-    <inertia ixx="0.140117" iyy="0.23813" izz="0.140334" ixy="-0.0" iyz="-3e-06" ixz="9e-06"/>
+    <origin xyz="0.0 0.0 0.0" rpy="0 0 0"/>
+    <mass value="11.4"/>
+    <inertia ixx="0.068" iyy="0.128" izz="0.068" ixy="0.0" iyz="0.0" ixz="0.0"/>
   </inertial>
   <visual>
-    <origin xyz="-0.28 -0.3 -0.18" rpy="0 0 0"/>
+    <origin xyz="0.288011 0.282104 -0.137319" rpy="0 0 0"/>
     <geometry>
-      <mesh filename="file://$(find diadem_description)/meshes/FL_wheel_1.dae" scale="0.001 0.001 0.001"/>
+      <mesh filename="package://diadem_description/meshes/link2_1.stl" scale="0.001 0.001 0.001"/>
     </geometry>
     <material name="silver"/>
   </visual>
   <collision name="FL_wheel_1_collision">
     <origin xyz="0 0 0" rpy="1.57079632679 0 0"/>
     <geometry>
-      <cylinder radius="0.18" length="0.08"/>
+      <cylinder radius="0.15" length="0.06"/>
     </geometry>
   </collision>
 </link>
 
 <link name="RL_wheel_1">
   <inertial>
-    <origin xyz="2.5214772154669163e-06 -0.0008355153634184154 1.0147042556557517e-05" rpy="0 0 0"/>
-    <mass value="11.400677627805788"/>
-    <inertia ixx="0.140117" iyy="0.23813" izz="0.140334" ixy="-0.0" iyz="-3e-06" ixz="9e-06"/>
+    <origin xyz="0.0 0.0 0.0" rpy="0 0 0"/>
+    <mass value="11.4"/>
+    <inertia ixx="0.068" iyy="0.128" izz="0.068" ixy="0.0" iyz="0.0" ixz="0.0"/>
   </inertial>
   <visual>
-    <origin xyz="0.28 -0.3 -0.18" rpy="0 0 0"/>
+    <origin xyz="-0.302686 0.286194 -0.140291" rpy="0 0 0"/>
     <geometry>
-      <mesh filename="file://$(find diadem_description)/meshes/RL_wheel_1.dae" scale="0.001 0.001 0.001"/>
+      <mesh filename="package://diadem_description/meshes/link4_1.stl" scale="0.001 0.001 0.001"/>
     </geometry>
     <material name="silver"/>
   </visual>
   <collision name="RL_wheel_1_collision">
     <origin xyz="0 0 0" rpy="1.57079632679 0 0"/>
     <geometry>
-      <cylinder radius="0.18" length="0.08"/>
+      <cylinder radius="0.15" length="0.06"/>
     </geometry>
   </collision>
 </link>
-<!-- Add this LiDAR link after the existing links -->
+
+<link name="FR_wheel_1">
+  <inertial>
+    <origin xyz="0.0 0.0 0.0" rpy="0 0 0"/>
+    <mass value="11.4"/>
+    <inertia ixx="0.068" iyy="0.128" izz="0.068" ixy="0.0" iyz="0.0" ixz="0.0"/>
+  </inertial>
+  <visual>
+    <origin xyz="0.288015 -0.277843 -0.145030" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="package://diadem_description/meshes/link3_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="silver"/>
+  </visual>
+  <collision name="FR_wheel_1_collision">
+    <origin xyz="0 0 0" rpy="1.57079632679 0 0"/>
+    <geometry>
+      <cylinder radius="0.15" length="0.06"/>
+    </geometry>
+  </collision>
+</link>
+
+<!-- =================== LiDAR =================== -->
 <link name="lidar">
   <inertial>
     <origin xyz="0 0 0" rpy="0 0 0"/>
-    <mass value="0.5"/>
-    <inertia ixx="0.001" iyy="0.001" izz="0.001" ixy="0.0" iyz="0.0" ixz="0.0"/>
+    <mass value="0.19"/>
+    <inertia ixx="0.0002" iyy="0.0002" izz="0.0003" ixy="0.0" iyz="0.0" ixz="0.0"/>
   </inertial>
   <visual>
     <origin xyz="0 0 0" rpy="0 0 0"/>
@@ -111,69 +158,82 @@
   </collision>
 </link>
 
-
-<link name="FR_wheel_1">
-  <inertial>
-    <origin xyz="-2.521477210637446e-06 0.0008355153634174162 1.0147042559055519e-05" rpy="0 0 0"/>
-    <mass value="11.400677627805969"/>
-    <inertia ixx="0.140117" iyy="0.23813" izz="0.140334" ixy="-0.0" iyz="3e-06" ixz="-9e-06"/>
-  </inertial>
-  <visual>
-    <origin xyz="-0.28 0.3 -0.18" rpy="0 0 0"/>
-    <geometry>
-      <mesh filename="file://$(find diadem_description)/meshes/FR_wheel_1.dae" scale="0.001 0.001 0.001"/>
-    </geometry>
-    <material name="silver"/>
-  </visual>
-  <collision name="FR_wheel_1_collision">
-    <origin xyz="0 0 0" rpy="1.57079632679 0 0"/>
-    <geometry>
-      <cylinder radius="0.18" length="0.08"/>
-    </geometry>
-  </collision>
-</link>
-
+<!-- =================== FIXED LINKS =================== -->
 <link name="imu_link"/>
+<link name="camera_link"/>
+<link name="camera_link_optical"/>
+<link name="gps_link"/>
+
+
+<!-- =================== JOINTS =================== -->
+
 <joint name="imu_joint" type="fixed">
-    <origin rpy="0 0 0" xyz="0.0 0.0 0.310"/>
+    <origin rpy="0 0 0" xyz="0.0 0.0 0.30"/>
     <parent link="base_link"/>
     <child link="imu_link"/>
 </joint>
 
+<joint name="gps_joint" type="fixed">
+    <origin rpy="0 0 0" xyz="0.0 0.0 0.31"/>
+    <parent link="base_link"/>
+    <child link="gps_link"/>
+</joint>
+
+<!-- Wheel joints
+     X = ±0.25 m (wheelbase/2 = 500mm/2)
+     Y = ±0.26 m (track/2 = 520mm/2)
+     Z =  0.15 m (wheel radius = ~6 inches / 150mm) -->
+
 <joint name="RR_wheel_joint" type="continuous">
-  <origin xyz="-0.28 -0.3 0.18" rpy="0 0 0"/>
+  <origin xyz="-0.25 -0.26 0.15" rpy="0 0 0"/>
   <parent link="base_link"/>
   <child link="RR_wheel_1"/>
-  <axis xyz="-0.0 1.0 -0.0"/>
+  <axis xyz="0.0 1.0 0.0"/>
+  <dynamics damping="0.7" friction="1.0"/>
 </joint>
 
 <joint name="FL_wheel_joint" type="continuous">
-  <origin xyz="0.28 0.3 0.18" rpy="0 0 0"/>
+  <origin xyz="0.25 0.26 0.15" rpy="0 0 0"/>
   <parent link="base_link"/>
   <child link="FL_wheel_1"/>
   <axis xyz="0.0 1.0 0.0"/>
+  <dynamics damping="0.7" friction="1.0"/>
 </joint>
 
 <joint name="RL_wheel_joint" type="continuous">
-  <origin xyz="-0.28 0.3 0.18" rpy="0 0 0"/>
+  <origin xyz="-0.25 0.26 0.15" rpy="0 0 0"/>
   <parent link="base_link"/>
   <child link="RL_wheel_1"/>
-  <axis xyz="-0.0 1.0 0.0"/>
+  <axis xyz="0.0 1.0 0.0"/>
+  <dynamics damping="0.7" friction="1.0"/>
 </joint>
 
 <joint name="FR_wheel_joint" type="continuous">
-  <origin xyz="0.28 -0.3 0.18" rpy="0 0 0"/>
+  <origin xyz="0.25 -0.26 0.15" rpy="0 0 0"/>
   <parent link="base_link"/>
   <child link="FR_wheel_1"/>
-  <axis xyz="-0.0 1.0 -0.0"/>
+  <axis xyz="0.0 1.0 0.0"/>
+  <dynamics damping="0.7" friction="1.0"/>
 </joint>
 
+<!-- LiDAR at 0.75m above base origin (body top + mast) -->
 <joint name="lidar_joint" type="fixed">
-  <origin xyz="0.0 0.0 0.64" rpy="0 0 -0.06"/>
+  <origin xyz="0.0 0.0 0.75" rpy="0 0 0"/>
   <parent link="base_link"/>
   <child link="lidar"/>
 </joint>
 
+<!-- Camera: slightly ahead of centre, tilted down 3° (for simulation feature rich view) -->
+<joint name="camera_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="camera_link"/>
+    <origin xyz="0.30 0.0 0.55" rpy="0.0 0.05 0"/>
+</joint>
 
+<joint name="camera_optical_joint" type="fixed">
+  <parent link="camera_link"/>
+  <child link="camera_link_optical"/>
+  <origin xyz="0 0 0" rpy="-1.57079632679 0 -1.57079632679"/>
+</joint>
 
 </robot>

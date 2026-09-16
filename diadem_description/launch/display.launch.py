@@ -1,7 +1,7 @@
 import launch
 from launch.substitutions import Command, LaunchConfiguration
 from launch.conditions import IfCondition
-from launch.actions import ExecuteProcess, DeclareLaunchArgument
+from launch.actions import ExecuteProcess, DeclareLaunchArgument, SetEnvironmentVariable
 import launch_ros
 import os
 from launch_ros.descriptions import ParameterValue
@@ -13,11 +13,23 @@ def generate_launch_description():
     gazebo_pkg_share = launch_ros.substitutions.FindPackageShare(
         package='diadem_gazebo').find('diadem_gazebo')
 
+    worlds_dir = os.path.join(gazebo_pkg_share, 'worlds')
+    models_dir = os.path.join(gazebo_pkg_share, 'models')
     default_model_path = os.path.join(pkg_share, 'urdf/diadem_sim.xacro')
     default_rviz_config_path = os.path.join(pkg_share, 'rviz/sensors.rviz')
     world_path = os.path.join(gazebo_pkg_share, 'worlds/room2.sdf')
     gz_bridge_core_config = os.path.join(gazebo_pkg_share, 'config/gz_bridge_core.yaml')
     gz_bridge_scan_config = os.path.join(gazebo_pkg_share, 'config/gz_bridge_scan.yaml')
+
+    gz_resource_paths = [
+        os.path.dirname(pkg_share),
+        os.path.dirname(gazebo_pkg_share),
+        worlds_dir,
+        models_dir,
+    ]
+    if 'GZ_SIM_RESOURCE_PATH' in os.environ and os.environ['GZ_SIM_RESOURCE_PATH']:
+        gz_resource_paths.append(os.environ['GZ_SIM_RESOURCE_PATH'])
+    gz_resource_path = ':'.join([p for p in gz_resource_paths if os.path.exists(p)])
 
     use_sim_time = LaunchConfiguration('use_sim_time')
 
@@ -48,9 +60,9 @@ def generate_launch_description():
         parameters=[{'use_sim_time': use_sim_time}],
     )
 
-    ign_gazebo = ExecuteProcess(
+    gz_sim = ExecuteProcess(
         condition=IfCondition(use_sim_time),
-        cmd=['ign', 'gazebo', '-r', world_path, '--verbose', '1'],
+        cmd=['gz', 'sim', '-r', world_path, '--verbose', '1'],
         output='screen'
     )
 
@@ -94,7 +106,11 @@ def generate_launch_description():
             name='rvizconfig', default_value=default_rviz_config_path,
             description='Absolute path to rviz config file'),
 
-        ign_gazebo,
+        SetEnvironmentVariable('GZ_SIM_RESOURCE_PATH', gz_resource_path),
+        SetEnvironmentVariable('IGN_GAZEBO_RESOURCE_PATH', gz_resource_path),
+        SetEnvironmentVariable('GZ_FILE_PATH', gz_resource_path),
+
+        gz_sim,
         gz_bridge_core,
         gz_bridge_scan,
         joint_state_publisher_node,

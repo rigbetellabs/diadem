@@ -17,14 +17,23 @@
     <plugin filename="libignition-gazebo-imu-system.so"
             name="ignition::gazebo::systems::Imu"/>
 
-    <!-- Physics -->
-    <physics name="1ms" type="ignored">
-      <max_step_size>0.001</max_step_size>
+    <!-- Default user camera position closer to the robot -->
+    <gui fullscreen='0'>
+      <camera name='user_camera'>
+        <pose>1.0 -1.0 0.8 0 0.5 2.35</pose>
+        <view_controller>orbit</view_controller>
+        <projection_type>perspective</projection_type>
+      </camera>
+    </gui>
+
+    <!--Physics-->
+    <physics name="5ms" type="ignored">
+      <max_step_size>0.005</max_step_size>
       <real_time_factor>1.0</real_time_factor>
-      <real_time_update_rate>1000</real_time_update_rate>
+      <real_time_update_rate>200</real_time_update_rate>
     </physics>
 
-    <!-- Scene -->
+    <!--Scene -->
     <scene>
       <ambient>0.4 0.4 0.4 1</ambient>
       <background>0.2 0.2 0.2 1</background>
@@ -32,7 +41,7 @@
       <grid>false</grid>
     </scene>
 
-    <!-- Lighting -->
+    <!--  Lighting -->
     <light name="sun" type="directional">
       <cast_shadows>true</cast_shadows>
       <pose>0 0 10 0 0 0</pose>
@@ -172,5 +181,81 @@
       </link>
     </model>
 
+
+    <!-- Box NE quadrant -->
+    <!-- <model name="box_ne">
+      <static>true</static>
+      <pose>2.5 2.0 0.5 0 0 0</pose>
+      <link name="link">
+        <collision name="collision">
+          <geometry><box><size>0.6 0.6 1.0</size></box></geometry>
+        </collision>
+        <visual name="visual">
+          <geometry><box><size>0.6 0.6 1.0</size></box></geometry>
+          <material>
+            <ambient>0.6 0.15 0.15 1</ambient>
+            <diffuse>0.7 0.2 0.2 1</diffuse>
+            <specular>0.1 0.05 0.05 1</specular>
+          </material>
+        </visual>
+      </link>
+    </model> -->
+
+    <!-- Box SW quadrant -->
+    <model name="box_sw">
+      <static>true</static>
+      <pose>-2.5 -2.0 0.5 0 0 0</pose>
+      <link name="link">
+        <collision name="collision">
+          <geometry><box><size>0.6 0.6 1.0</size></box></geometry>
+        </collision>
+        <visual name="visual">
+          <geometry><box><size>0.6 0.6 1.0</size></box></geometry>
+          <material>
+            <ambient>0.15 0.2 0.6 1</ambient>
+            <diffuse>0.2 0.3 0.7 1</diffuse>
+            <specular>0.05 0.05 0.1 1</specular>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- Cylinder NW quadrant -->
+    <model name="cylinder_nw">
+      <static>true</static>
+      <pose>-2.5 2.0 0.5 0 0 0</pose>
+      <link name="link">
+        <collision name="collision">
+          <geometry><cylinder><radius>0.3</radius><length>1.0</length></cylinder></geometry>
+        </collision>
+        <visual name="visual">
+          <geometry><cylinder><radius>0.3</radius><length>1.0</length></cylinder></geometry>
+          <material>
+            <ambient>0.15 0.5 0.15 1</ambient>
+            <diffuse>0.2 0.6 0.2 1</diffuse>
+            <specular>0.05 0.1 0.05 1</specular>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- Cylinder SE quadrant -->
+    <model name="cylinder_se">
+      <static>true</static>
+      <pose>2.5 -2.0 0.5 0 0 0</pose>
+      <link name="link">
+        <collision name="collision">
+          <geometry><cylinder><radius>0.3</radius><length>1.0</length></cylinder></geometry>
+        </collision>
+        <visual name="visual">
+          <geometry><cylinder><radius>0.3</radius><length>1.0</length></cylinder></geometry>
+          <material>
+            <ambient>0.5 0.4 0.1 1</ambient>
+            <diffuse>0.6 0.5 0.15 1</diffuse>
+            <specular>0.1 0.08 0.02 1</specular>
+          </material>
+        </visual>
+      </link>
+    </model>
   </world>
 </sdf>
